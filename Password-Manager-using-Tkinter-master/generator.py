@@ -17,8 +17,7 @@ class PasswordGenerator:
         self.window.geometry("450x300")
 
         # Label Frame
-        self.label_frame = LabelFrame(
-            self.window, text="Enter the number of characters")
+        self.label_frame = LabelFrame(self.window, text="Enter the number of characters")
         self.label_frame.pack(pady=20)
 
         # Entry box for number of characters
@@ -29,8 +28,7 @@ class PasswordGenerator:
         self.feedback = Label(self.window)
 
         # Entry box for password
-        self.password_entry_box = Entry(
-            self.window, text="", width=50)
+        self.password_entry_box = Entry(self.window, text="", width=50)
         self.password_entry_box.pack(pady=20)
 
         # Frame for buttons
@@ -38,13 +36,11 @@ class PasswordGenerator:
         self.button_frame.pack(pady=20)
 
         # Generate Password Button
-        generate_btn = Button(
-            self.button_frame, text="Generate Password", command=self.generate_random_password)
+        generate_btn = Button(self.button_frame, text="Generate Password", command=self.generate_random_password)
         generate_btn.grid(row=0, column=0, padx=10)
 
         # Copy Password Button
-        copy_btn = Button(self.button_frame,
-                          text="Copy Password", command=self.copy_password)
+        copy_btn = Button(self.button_frame, text="Copy Password", command=self.copy_password)
         copy_btn.grid(row=0, column=1, padx=10)
 
     def generate_random_password(self):
@@ -56,8 +52,7 @@ class PasswordGenerator:
             password = ''.join(choice(data) for _ in range(password_length))
             self.password_entry_box.insert(0, password)
         except ValueError:
-            self.feedback = Label(self.window, fg="red",
-                                  text="Please enter number of characters")
+            self.feedback = Label(self.window, fg="red", text="Please enter number of characters")
             self.feedback.place(x=130, y=100)
 
     def copy_password(self):
