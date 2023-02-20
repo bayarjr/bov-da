@@ -1,3 +1,4 @@
+"""
 import psycopg2
 
 try:
@@ -24,3 +25,32 @@ try:
     
 except Exception as ex:
         print(ex)
+        
+"""
+
+import psycopg2
+
+# Conexión a la base de datos
+conn = psycopg2.connect(
+    host="localhost",
+    database="Boveda",
+    user="posgresql",
+    password="Acciowombat5268"
+)
+
+# Creación de un cursor para realizar consultas a la base de datos
+cur = conn.cursor()
+
+# Ejecución de una consulta
+cur.execute("SELECT * FROM contraseñas")
+
+# Obtención de los resultados
+resultados = cur.fetchall()
+
+# Cierre del cursor y la conexión a la base de datos
+cur.close()
+conn.close()
+
+
+
+
