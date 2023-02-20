@@ -59,8 +59,10 @@ class VentanaPrincipal:
             self.username.set('')
             self.password.set('')
         else:
+            self.ventana.withdraw() 
             ventana_i = tk.Toplevel(self.ventana)
             VentanaI(ventana_i)
+            
             print(self.username.get())
             print(self.password.get())
             print("iniciar sesión")
@@ -177,7 +179,7 @@ class VentanaI:
 
         self.Objetos_ventanaI()
     
-    def Objetos_ventanaI():
+    def Objetos_ventanaI(self):
         print ("ventana inicio")
     
 
