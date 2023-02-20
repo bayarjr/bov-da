@@ -1,4 +1,4 @@
-from tkinter import Button, Entry, Frame, Label, LabelFrame, Tk
+from tkinter import Button, Entry, Frame, Label, LabelFrame, Tk, messagebox
 import tkinter as tk
 
 class VentanaPrincipal:
@@ -110,26 +110,56 @@ class VentanaNu:
 
         login_button.grid(row=3, column=0)
        
-
     def Registrar(self):
         print(self.username.get())
         print(self.password.get())
         print(self.password2.get())
 
-        self.username_entry.delete(0, tk.END)
-        self.password_entry.delete(0, tk.END)
-        self.password_entry2.delete(0, tk.END)
-        self.username.set('')
-        self.password.set('')
-        self.password2.set('')
-
-        self.ventana.destroy()
-        print("Registrar")
+        if self.username.get() == "":
+            messagebox.showerror("Error en crear usuario", "No ingreso el nombre de usuario")
+            self.username_entry.delete(0, tk.END)
+            self.password_entry.delete(0, tk.END)
+            self.password_entry2.delete(0, tk.END)
+            self.username.set('')
+            self.password.set('')
+            self.password2.set('')
+        elif self.password.get() == "":
+            messagebox.showerror("Error en crear usuario", "No ingreso la contraseña")
+            self.username_entry.delete(0, tk.END)
+            self.password_entry.delete(0, tk.END)
+            self.password_entry2.delete(0, tk.END)
+            self.username.set('')
+            self.password.set('')
+            self.password2.set('')
+        elif self.password2.get() == "":
+            messagebox.showerror("Error en crear usuario", "No ingreso la confirmación de contraseña")
+            self.username_entry.delete(0, tk.END)
+            self.password_entry.delete(0, tk.END)
+            self.password_entry2.delete(0, tk.END)
+            self.username.set('')
+            self.password.set('')
+            self.password2.set('')
+        elif self.password.get() != self.password2.get():
+            messagebox.showerror("Error en crear usuario", "Las contraseñas no son iguales")
+            self.username_entry.delete(0, tk.END)
+            self.password_entry.delete(0, tk.END)
+            self.password_entry2.delete(0, tk.END)
+            self.username.set('')
+            self.password.set('')
+            self.password2.set('')
+        else: 
+            self.username_entry.delete(0, tk.END)
+            self.password_entry.delete(0, tk.END)
+            self.password_entry2.delete(0, tk.END)
+            self.username.set('')
+            self.password.set('')
+            self.password2.set('')
+            self.ventana.destroy()
+            print("Registrar")
+  
+        
     
     
-
-
-
 def main():
 
     ventana = tk.Tk()
