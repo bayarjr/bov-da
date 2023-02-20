@@ -19,7 +19,8 @@ try:
 
     # Cierre de conexión
     connection.close()
-    
     print("Conexión exitosa")
+
+    
 except Exception as ex:
         print(ex)
