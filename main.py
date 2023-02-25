@@ -172,9 +172,11 @@ class VentanaNu:
             print("Registrar")
 
 class VentanaI:
+
+    
     def __init__(self, ventana):
         self.ventana = ventana
-        self.ventana.title("Boveda de contraseñas")
+        self.ventana.title("Administrador de contraseñas")
         self.ventana.geometry("450x300")
 
         self.Objetos_ventanaI()
