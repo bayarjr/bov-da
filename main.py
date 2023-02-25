@@ -173,7 +173,7 @@ class VentanaNu:
 
 class VentanaI:
 
-    
+
     def __init__(self, ventana):
         self.ventana = ventana
         self.ventana.title("Administrador de contraseñas")
@@ -184,10 +184,7 @@ class VentanaI:
     def Objetos_ventanaI(self):
         print ("ventana inicio")
     
-
-        
-    
-    
+   
 def main():
 
     ventana = tk.Tk()

@@ -34,13 +34,13 @@ import psycopg2
 conn = psycopg2.connect(
     host="localhost",
     database="Boveda",
-    user="postgresql",
-    password="Acciowombat5268"
+    user="postgres",
+    password="j088058495r"
 )
 
 # Creación de un cursor para realizar consultas a la base de datos
 cur = conn.cursor()
-
+print("Conexion ok")
 # Ejecución de una consulta
 cur.execute("SELECT * FROM contraseñas")
 
