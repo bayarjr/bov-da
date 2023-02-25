@@ -1,4 +1,4 @@
-from tkinter import Button, Entry, Frame, Label, LabelFrame, Tk
+from tkinter import Button, Entry, Frame, Label, LabelFrame, Tk, messagebox
 import tkinter as tk
 
 class VentanaPrincipal:
@@ -46,15 +46,26 @@ class VentanaPrincipal:
         new_user_button.grid(row=3, column=1)
 
     def IniciarSesion(self):
-        print(self.username.get())
-        print(self.password.get())
-
-        self.username_entry.delete(0, tk.END)
-        self.password_entry.delete(0, tk.END)
-        self.username.set('')
-        self.password.set('')
-
-        print("iniciar sesión")
+        if self.username.get() == "":
+            messagebox.showerror("Error en crear usuario", "No ingreso el nombre de usuario")
+            self.username_entry.delete(0, tk.END)
+            self.password_entry.delete(0, tk.END)
+            self.username.set('')
+            self.password.set('')
+        elif self.password.get() == "":
+            messagebox.showerror("Error en crear usuario", "No ingreso la contraseña")
+            self.username_entry.delete(0, tk.END)
+            self.password_entry.delete(0, tk.END)
+            self.username.set('')
+            self.password.set('')
+        else:
+            self.ventana.withdraw() 
+            ventana_i = tk.Toplevel(self.ventana)
+            VentanaI(ventana_i)
+            
+            print(self.username.get())
+            print(self.password.get())
+            print("iniciar sesión")
     
     def NuevoUsuario(self):
         ventana_nu = tk.Toplevel(self.ventana)
@@ -110,26 +121,71 @@ class VentanaNu:
 
         login_button.grid(row=3, column=0)
        
-
     def Registrar(self):
-        print(self.username.get())
-        print(self.password.get())
-        print(self.password2.get())
+        if self.username.get() == "":
+            messagebox.showerror("Error en crear usuario", "No ingreso el nombre de usuario")
+            self.username_entry.delete(0, tk.END)
+            self.password_entry.delete(0, tk.END)
+            self.password_entry2.delete(0, tk.END)
+            self.username.set('')
+            self.password.set('')
+            self.password2.set('')
 
-        self.username_entry.delete(0, tk.END)
-        self.password_entry.delete(0, tk.END)
-        self.password_entry2.delete(0, tk.END)
-        self.username.set('')
-        self.password.set('')
-        self.password2.set('')
+        elif self.password.get() == "":
+            messagebox.showerror("Error en crear usuario", "No ingreso la contraseña")
+            self.username_entry.delete(0, tk.END)
+            self.password_entry.delete(0, tk.END)
+            self.password_entry2.delete(0, tk.END)
+            self.username.set('')
+            self.password.set('')
+            self.password2.set('')
 
-        self.ventana.destroy()
-        print("Registrar")
+        elif self.password2.get() == "":
+            messagebox.showerror("Error en crear usuario", "No ingreso la confirmación de contraseña")
+            self.username_entry.delete(0, tk.END)
+            self.password_entry.delete(0, tk.END)
+            self.password_entry2.delete(0, tk.END)
+            self.username.set('')
+            self.password.set('')
+            self.password2.set('')
+
+        elif self.password.get() != self.password2.get():
+            messagebox.showerror("Error en crear usuario", "Las contraseñas no son iguales")
+            self.username_entry.delete(0, tk.END)
+            self.password_entry.delete(0, tk.END)
+            self.password_entry2.delete(0, tk.END)
+            self.username.set('')
+            self.password.set('')
+            self.password2.set('')
+
+        else: 
+            self.username_entry.delete(0, tk.END)
+            self.password_entry.delete(0, tk.END)
+            self.password_entry2.delete(0, tk.END)
+            self.username.set('')
+            self.password.set('')
+            self.password2.set('')
+            self.ventana.destroy()
+            print(self.username.get())
+            print(self.password.get())
+            print(self.password2.get())
+            print("Registrar")
+
+class VentanaI:
+    def __init__(self, ventana):
+        self.ventana = ventana
+        self.ventana.title("Boveda de contraseñas")
+        self.ventana.geometry("450x300")
+
+        self.Objetos_ventanaI()
+    
+    def Objetos_ventanaI(self):
+        print ("ventana inicio")
+    
+
+        
     
     
-
-
-
 def main():
 
     ventana = tk.Tk()
