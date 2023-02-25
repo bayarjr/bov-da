@@ -34,7 +34,7 @@ import psycopg2
 conn = psycopg2.connect(
     host="localhost",
     database="Boveda",
-    user="posgresql",
+    user="postgresql",
     password="Acciowombat5268"
 )
 
