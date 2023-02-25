@@ -50,7 +50,12 @@ resultados = cur.fetchall()
 # Cierre del cursor y la conexión a la base de datos
 cur.close()
 conn.close()
+""""
+# Comprobación de la conexión
+if conn.closed == 0:
+    print("Conexión a la base de datos establecida")
+else:
+    print("No se pudo establecer la conexión a la base de datos")
 
 
-
-
+"""
