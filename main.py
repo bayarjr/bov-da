@@ -1,7 +1,21 @@
 from tkinter import Button, Entry, Frame, Label, LabelFrame, Tk, messagebox
 import tkinter as tk
 from tkinter import ttk
-from conexion_postgresql import In_baseDatos
+import psycopg2
+
+class BaseDatos:
+    def __init__(self):
+        self.conn = None
+    
+    def conectar(self):
+        self.conn = psycopg2.connect(host="localhost", database="Boveda", user="postgres", password="j088058495r")
+        print("BD abierta")
+        return self.conn
+    
+    def cerrar(self):
+        if self.conn is not None:
+            print("BD Cerrada")
+            self.conn.close()
 
 class VentanaPrincipal:
 
@@ -221,13 +235,17 @@ class VentanaI:
     def Modificar(self):
         print("Modificar") 
    
-def main():
-
+def main():       
     ventana = tk.Tk()
     # Crea la instancia de la clase VentanaPrincipal
     VentanaPrincipal(ventana)
+    #bd = BaseDatos()
+    #bd.conectar()
+    #bd.cerrar()
     # Ejecuta la ventana
     ventana.mainloop()
+
+    
 
 if __name__ == "__main__":
     main()
