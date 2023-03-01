@@ -1,5 +1,6 @@
 from tkinter import Button, Entry, Frame, Label, LabelFrame, Tk, messagebox
 import tkinter as tk
+from tkinter import ttk
 
 class VentanaPrincipal:
 
@@ -173,7 +174,6 @@ class VentanaNu:
 
 class VentanaI:
 
-
     def __init__(self, ventana):
         self.ventana = ventana
         self.ventana.title("Administrador de contraseñas")
@@ -183,7 +183,42 @@ class VentanaI:
     
     def Objetos_ventanaI(self):
         print ("ventana inicio")
-    
+        self.frame = tk.LabelFrame(self.ventana)
+        self.frame.pack(padx=40, pady=40)
+        self.frame1 = tk.LabelFrame(self.ventana)
+        self.frame1.pack(padx=40, pady=40)
+
+        self.elementos = ("Elemento 1", "Elemento 2", "Elemento 3", "Elemento 4", "Elemento 5")
+
+        # Crear el ComboBox y agregarlo a la ventana
+        self.combo_box = ttk.Combobox(self.frame, state="readonly")
+        self.combo_box.pack(padx=20, pady=10)
+
+        # Llenar el ComboBox con los elementos de la tupla
+        self.combo_box["values"] = self.elementos
+
+        # Vincular el ComboBox a una variable de control
+        self.seleccion = tk.StringVar()
+        self.combo_box.config(textvariable=self.seleccion)
+        self.combo_box.bind("<<ComboboxSelected>>", self.mostrar_elemento)
+        
+        # Crear la etiqueta donde se mostrará el elemento seleccionado
+        self.label_elemento = tk.Label(self.frame, text="")
+        self.label_elemento.pack(padx=20, pady=10)
+
+        # Crear los botones
+        mod_button = tk.Button(self.frame1, text="Modificar", command = self.Modificar)
+        mod_button.grid(row=3, column=0)
+
+    def mostrar_elemento(self, event):
+        # Obtener el elemento seleccionado
+        elemento = self.seleccion.get()
+
+        # Mostrar el elemento seleccionado en la etiqueta
+        self.label_elemento.config(text=f"Elemento seleccionado: {elemento}")
+
+    def Modificar(self):
+        print("Modificar") 
    
 def main():
 
