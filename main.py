@@ -1,6 +1,7 @@
 from tkinter import Button, Entry, Frame, Label, LabelFrame, Tk, messagebox
 import tkinter as tk
 from tkinter import ttk
+from conexion_postgresql import In_baseDatos
 
 class VentanaPrincipal:
 
