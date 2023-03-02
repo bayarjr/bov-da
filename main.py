@@ -200,13 +200,17 @@ class VentanaNu:
             self.password2.set('')
 
         else: 
-            # Ejecución de una sentencia SQL para insertar datos en una tabla
-            cur.execute("INSERT INTO master_user (usuario, pass) VALUES (%s, %s)", (self.username.get(), self.password.get()))
+            pE= Encriptar(self.password.get())
+            passEncriptado = pE.contrasena()
+
+            cur.execute("INSERT INTO master_user (usuario, pass) VALUES (%s, %s)", (self.username.get(), passEncriptado))
+            cur.execute("INSERT INTO credenciales (usuario_C) VALUES (%s)", (self.username.get()))
             bd.cerrar()
 
             print(self.username.get())
             print(self.password.get())
             print(self.password2.get())
+            print(passEncriptado)
             
             self.username_entry.delete(0, tk.END)
             self.password_entry.delete(0, tk.END)
