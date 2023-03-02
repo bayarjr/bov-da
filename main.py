@@ -2,6 +2,7 @@ from tkinter import Button, Entry, Frame, Label, LabelFrame, Tk, messagebox
 import tkinter as tk
 from tkinter import ttk
 import psycopg2
+import hashlib
 
 class BaseDatos:
     def __init__(self):
@@ -18,6 +19,23 @@ class BaseDatos:
             self.conn.commit()
             self.conn.close()
             print("BD Cerrada")
+
+class Encriptar:
+    def __init__(self, passw):
+        self.passw = passw
+
+    def contrasena(self):
+        """Función que encripta una contraseña utilizando SHA-256"""
+        # Codifica la contraseña en bytes
+        contraseña_bytes = self.passw.encode('utf-8')
+        # Crea un objeto de hash SHA-256
+        hash_obj = hashlib.sha256()
+        # Actualiza el objeto de hash con los bytes de la contraseña
+        hash_obj.update(contraseña_bytes)
+        # Genera el hash de la contraseña en formato hexadecimal
+        hash_hex = hash_obj.hexdigest()
+        # Devuelve el hash de la contraseña
+        return hash_hex
 
 class VentanaPrincipal:
 
@@ -199,9 +217,7 @@ class VentanaNu:
             self.ventana.destroy()
                      
             print("Registrar")
-
-            
-
+  
 class VentanaI:
 
     def __init__(self, ventana):
@@ -259,8 +275,7 @@ def main():
     #bd.cerrar()
     # Ejecuta la ventana
     ventana.mainloop()
-
-    
+   
 
 if __name__ == "__main__":
     main()
