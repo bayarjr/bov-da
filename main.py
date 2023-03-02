@@ -283,9 +283,7 @@ class VentanaI:
         self.entry.insert(0, elemento)
         # Configurar el widget Entry como de solo lectura
         self.entry.config(state="readonly")
-
        
-
     def Modificar(self):
         print("Modificar") 
         self.entry.config(state="normal")
