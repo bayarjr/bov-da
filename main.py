@@ -110,14 +110,15 @@ class VentanaPrincipal:
                     bd.cerrar()
                     self.ventana.withdraw() # Este método oculta la ventana actual, sin destruirla, para que no sea visible al usuario
                     ventana_i = tk.Toplevel(self.ventana)
-                    VentanaI(ventana_i)
+                    VentanaI(ventana_i, self.username.get())
                 else:
                     messagebox.showerror("Error en crear usuario", "Contraseña Incorrecta")
+            else:
+                messagebox.showerror("Error en crear usuario", "No se encontro el usuario")
 
             
             print(self.username.get())
             print(self.password.get())
-            print(passEncriptado)
             print("iniciar sesión")
  
     def NuevoUsuario(self):
@@ -175,11 +176,7 @@ class VentanaNu:
         login_button.grid(row=3, column=0)
        
     def Registrar(self):
-        bd = BaseDatos()
-        conn = bd.conectar()
-        # Creación de un cursor
-        cur = conn.cursor()
-           
+                 
         if self.username.get() == "":
             messagebox.showerror("Error en crear usuario", "No ingreso el nombre de usuario")
             self.username_entry.delete(0, tk.END)
@@ -219,7 +216,10 @@ class VentanaNu:
         else: 
             pE= Encriptar(self.password.get())
             passEncriptado = pE.contrasena()
-
+            bd = BaseDatos()
+            conn = bd.conectar()
+            # Creación de un cursor
+            cur = conn.cursor()
             cur.execute("INSERT INTO master_user (usuario, pass) VALUES (%s, %s)", (str(self.username.get()), passEncriptado))
             cur.execute("INSERT INTO credenciales (usuario_c) VALUES (%s)", (str(self.username.get()),))
             bd.cerrar()
@@ -241,11 +241,11 @@ class VentanaNu:
   
 class VentanaI:
 
-    def __init__(self, ventana):
+    def __init__(self, ventana, usuario):
         self.ventana = ventana
+        self.usuario = usuario
         self.ventana.title("Administrador de contraseñas")
         self.ventana.geometry("450x300")
-
         self.Objetos_ventanaI()
     
     def Objetos_ventanaI(self):
@@ -300,5 +300,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
