@@ -270,8 +270,8 @@ class VentanaI:
         self.combo_box.bind("<<ComboboxSelected>>", self.mostrar_elemento)
         
         # Crear la etiqueta donde se mostrará el elemento seleccionado
-        self.label_elemento = tk.Label(self.frame, text="")
-        self.label_elemento.pack(padx=20, pady=10)
+        self.entry = tk.Entry(self.frame)
+        self.entry.pack(padx=20, pady=10)
 
         # Crear los botones
         mod_button = tk.Button(self.frame1, text="Modificar", command = self.Modificar)
@@ -280,12 +280,16 @@ class VentanaI:
     def mostrar_elemento(self, event):
         # Obtener el elemento seleccionado
         elemento = self.seleccion.get()
+        self.entry.insert(0, elemento)
+        # Configurar el widget Entry como de solo lectura
+        self.entry.config(state="readonly")
 
-        # Mostrar el elemento seleccionado en la etiqueta
-        self.label_elemento.config(text=f"Elemento seleccionado: {elemento}")
+       
 
     def Modificar(self):
         print("Modificar") 
+        self.entry.config(state="normal")
+
    
 def main():       
     ventana = tk.Tk()
