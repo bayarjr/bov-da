@@ -95,14 +95,31 @@ class VentanaPrincipal:
             self.username.set('')
             self.password.set('')
         else:
-            self.ventana.withdraw() 
-            ventana_i = tk.Toplevel(self.ventana)
-            VentanaI(ventana_i)
+            bd = BaseDatos()
+            conn = bd.conectar()
+            # Creación de un cursor
+            cur = conn.cursor()
+            cur.execute("SELECT pass FROM master_user WHERE usuario = %s", (self.username.get(),))
+            resultado = cur.fetchone()
+
+            if resultado is not None:
+                contrasena_bd = resultado[0]
+                pE= Encriptar(self.password.get())
+                passEncriptado = pE.contrasena()
+                if contrasena_bd == passEncriptado:
+                    bd.cerrar()
+                    self.ventana.withdraw() # Este método oculta la ventana actual, sin destruirla, para que no sea visible al usuario
+                    ventana_i = tk.Toplevel(self.ventana)
+                    VentanaI(ventana_i)
+                else:
+                    messagebox.showerror("Error en crear usuario", "Contraseña Incorrecta")
+
             
             print(self.username.get())
             print(self.password.get())
+            print(passEncriptado)
             print("iniciar sesión")
-    
+ 
     def NuevoUsuario(self):
         ventana_nu = tk.Toplevel(self.ventana)
         VentanaNu(ventana_nu)
@@ -203,8 +220,8 @@ class VentanaNu:
             pE= Encriptar(self.password.get())
             passEncriptado = pE.contrasena()
 
-            cur.execute("INSERT INTO master_user (usuario, pass) VALUES (%s, %s)", (self.username.get(), passEncriptado))
-            cur.execute("INSERT INTO credenciales (usuario_C) VALUES (%s)", (self.username.get()))
+            cur.execute("INSERT INTO master_user (usuario, pass) VALUES (%s, %s)", (str(self.username.get()), passEncriptado))
+            cur.execute("INSERT INTO credenciales (usuario_c) VALUES (%s)", (str(self.username.get()),))
             bd.cerrar()
 
             print(self.username.get())
