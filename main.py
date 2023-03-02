@@ -14,8 +14,10 @@ class BaseDatos:
     
     def cerrar(self):
         if self.conn is not None:
-            print("BD Cerrada")
+            # Confirmar la transacción
+            self.conn.commit()
             self.conn.close()
+            print("BD Cerrada")
 
 class VentanaPrincipal:
 
@@ -138,6 +140,11 @@ class VentanaNu:
         login_button.grid(row=3, column=0)
        
     def Registrar(self):
+        bd = BaseDatos()
+        conn = bd.conectar()
+        # Creación de un cursor
+        cur = conn.cursor()
+           
         if self.username.get() == "":
             messagebox.showerror("Error en crear usuario", "No ingreso el nombre de usuario")
             self.username_entry.delete(0, tk.END)
@@ -175,6 +182,14 @@ class VentanaNu:
             self.password2.set('')
 
         else: 
+            # Ejecución de una sentencia SQL para insertar datos en una tabla
+            cur.execute("INSERT INTO master_user (usuario, pass) VALUES (%s, %s)", (self.username.get(), self.password.get()))
+            bd.cerrar()
+
+            print(self.username.get())
+            print(self.password.get())
+            print(self.password2.get())
+            
             self.username_entry.delete(0, tk.END)
             self.password_entry.delete(0, tk.END)
             self.password_entry2.delete(0, tk.END)
@@ -182,10 +197,10 @@ class VentanaNu:
             self.password.set('')
             self.password2.set('')
             self.ventana.destroy()
-            print(self.username.get())
-            print(self.password.get())
-            print(self.password2.get())
+                     
             print("Registrar")
+
+            
 
 class VentanaI:
 
