@@ -250,36 +250,36 @@ class VentanaI:
     
     def Objetos_ventanaI(self):
         print ("ventana inicio")
-        self.frame = tk.LabelFrame(self.ventana)
-        self.frame.pack(padx=40, pady=40)
-        self.frame1 = tk.LabelFrame(self.ventana)
-        self.frame1.pack(padx=40, pady=40)
+        frame = tk.LabelFrame(self.ventana)
+        frame.pack(padx=40, pady=10)
+        frame1 = tk.LabelFrame(self.ventana)
+        frame1.pack(padx=40, pady=10)
 
         self.elementos = ("Elemento 1", "Elemento 2", "Elemento 3", "Elemento 4", "Elemento 5")
 
         # Crear el ComboBox y agregarlo a la ventana
-        self.combo_box = ttk.Combobox(self.frame, state="readonly")
-        self.combo_box.pack(padx=20, pady=10)
-
+        combo_box = ttk.Combobox(frame, state="readonly")
+        combo_box.grid(row=0, column=0)
+        
         # Llenar el ComboBox con los elementos de la tupla
-        self.combo_box["values"] = self.elementos
+        combo_box["values"] = self.elementos
 
         # Vincular el ComboBox a una variable de control
         self.seleccion = tk.StringVar()
-        self.combo_box.config(textvariable=self.seleccion)
-        self.combo_box.bind("<<ComboboxSelected>>", self.mostrar_elemento)
+        combo_box.config(textvariable=self.seleccion)
+        combo_box.bind("<<ComboboxSelected>>", self.mostrar_elemento)
         
         # Crear la etiqueta donde se mostrará el elemento seleccionado
-        self.entry = tk.Entry(self.frame)
-        self.entry.pack(padx=20, pady=10)
+        self.entry = tk.Entry(frame)
+        self.entry.grid(row=1, column=0)
 
         # Crear los botones
-        mod_button = tk.Button(self.frame1, text="Modificar", command = self.Modificar)
-        mod_button.grid(row=3, column=0)
-        mod_button.pack(padx=20, pady=20)
-        new_button = tk.Button(self.frame1, text="Nuevo", command = self.NuevoCredencial)
-        new_button.grid(row=3, column=1)
-        new_button.pack(padx=20, pady=20)
+        mod_button = tk.Button(frame1, text="Modificar", command = self.Modificar)
+        #mod_button.grid(row=0, column=0)
+        mod_button.grid(row=0, column=0)
+        new_button = tk.Button(frame1, text="Nuevo", command = self.NuevoCredencial)
+        #new_button.grid(row=0, column=1)
+        new_button.grid(row=0, column=1)
 
     def mostrar_elemento(self, event):
         # Obtener el elemento seleccionado
@@ -309,10 +309,10 @@ class VentanaNuCre:
         
         # Crea frame para entradas
         self.frame = tk.LabelFrame(self.ventana)
-        self.frame.pack(padx=80, pady=80)
+        self.frame.pack(padx=40, pady=10)
 
         self.frame1 = tk.LabelFrame(self.ventana)
-        self.frame1.pack(padx=80, pady=80)
+        self.frame1.pack(padx=40, pady=10)
 
         # Crea labels y entry
         labelNombre = tk.Label(self.frame, text="(Nombre del servicio digital:")
@@ -356,10 +356,10 @@ class VentanaNuCre:
                 
         # Crear botones
         btn_guardar = tk.Button(self.frame1, text="Guardar", command = self.Guardar)
-        btn_guardar.grid(row=6, column=0)
+        btn_guardar.grid(row=5, column=0)
         
         btn_cancelar = tk.Button(self.frame1, text="Generar Contraseñas", command = self.GenerarContra)
-        btn_cancelar.grid(row=6, column=1)
+        btn_cancelar.grid(row=5, column=1)
     
     def Guardar():
         print("B Guardar")
