@@ -101,20 +101,20 @@ class VentanaPrincipal:
             cur = conn.cursor()
             cur.execute("SELECT pass FROM master_user WHERE usuario = %s", (self.username.get(),))
             resultado = cur.fetchone()
+            bd.cerrar()
 
             if resultado is not None:
                 contrasena_bd = resultado[0]
-                pE= Encriptar(self.password.get())
+                pE = Encriptar(self.password.get())
                 passEncriptado = pE.contrasena()
                 if contrasena_bd == passEncriptado:
-                    bd.cerrar()
                     self.ventana.withdraw() # Este método oculta la ventana actual, sin destruirla, para que no sea visible al usuario
                     ventana_i = tk.Toplevel(self.ventana)
                     VentanaI(ventana_i, self.username.get())
                 else:
-                    messagebox.showerror("Error en crear usuario", "Contraseña Incorrecta")
+                    messagebox.showerror("Error", "Contraseña Incorrecta")
             else:
-                messagebox.showerror("Error en crear usuario", "No se encontro el usuario")
+                messagebox.showerror("Error", "No se encontro el usuario")
 
             
             print(self.username.get())
@@ -287,18 +287,13 @@ class VentanaI:
     def Modificar(self):
         print("Modificar") 
         self.entry.config(state="normal")
-
    
 def main():       
     ventana = tk.Tk()
     # Crea la instancia de la clase VentanaPrincipal
     VentanaPrincipal(ventana)
-    #bd = BaseDatos()
-    #bd.conectar()
-    #bd.cerrar()
     # Ejecuta la ventana
     ventana.mainloop()
-   
 
 if __name__ == "__main__":
     main()
