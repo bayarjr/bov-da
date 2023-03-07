@@ -276,6 +276,10 @@ class VentanaI:
         # Crear los botones
         mod_button = tk.Button(self.frame1, text="Modificar", command = self.Modificar)
         mod_button.grid(row=3, column=0)
+        mod_button.pack(padx=20, pady=20)
+        new_button = tk.Button(self.frame1, text="Nuevo", command = self.NuevoCredencial)
+        new_button.grid(row=3, column=1)
+        new_button.pack(padx=20, pady=20)
 
     def mostrar_elemento(self, event):
         # Obtener el elemento seleccionado
@@ -287,7 +291,83 @@ class VentanaI:
     def Modificar(self):
         print("Modificar") 
         self.entry.config(state="normal")
-   
+
+    def NuevoCredencial(self):
+        ventana_nu_cre = tk.Toplevel(self.ventana)
+        VentanaNuCre(ventana_nu_cre)
+        print("boton nuevo credencial")
+
+class VentanaNuCre:
+    def __init__(self, ventana):
+        self.ventana = ventana
+        self.ventana.title("Nuevo Credencial")
+        self.ventana.geometry("450x300")
+
+        self.Objetos_ventanaNuCre()
+    
+    def Objetos_ventanaNuCre(self):
+        
+        # Crea frame para entradas
+        self.frame = tk.LabelFrame(self.ventana)
+        self.frame.pack(padx=80, pady=80)
+
+        self.frame1 = tk.LabelFrame(self.ventana)
+        self.frame1.pack(padx=80, pady=80)
+
+        # Crea labels y entry
+        labelNombre = tk.Label(self.frame, text="(Nombre del servicio digital:")
+        labelNombre.grid(row=0, column=0)
+        entryNombre = tk.Entry(self.frame)
+        entryNombre.grid(row=0, column=1)
+        
+        labelUsuario = tk.Label(self.frame, text="Usuario:")
+        labelUsuario.grid(row=1, column=0)
+        entryUsuario = tk.Entry(self.frame)
+        entryUsuario.grid(row=1, column=1)
+        
+        labelContrasena = tk.Label(self.frame, text="Contraseña:")
+        labelContrasena.grid(row=2, column=0)
+        entryContrasena = tk.Entry(self.frame)
+        entryContrasena.grid(row=2, column=1)
+        
+        labelUrl = tk.Label(self.frame, text="URL:")
+        labelUrl.grid(row=3, column=0)
+        entryUrl = tk.Entry(self.frame)
+        entryUrl.grid(row=3, column=1)
+        
+        labelNotas = tk.Label(self.frame, text="Notas:")
+        labelNotas.grid(row=4, column=0)
+        entryNotas = tk.Entry(self.frame)
+        entryNotas.grid(row=4, column=1)
+  
+        # Crea las variables de instancia para guardar los valores de las entradas
+        self.nombre = tk.StringVar()
+        self.usuario = tk.StringVar()
+        self.contrasena = tk.StringVar()
+        self.url = tk.StringVar()
+        self.notas = tk.StringVar()
+
+        # Asigna las variables de instancia a las cuadros de entrada de texto
+        entryNombre.config(textvariable = self.nombre)
+        entryUsuario.config(textvariable = self.usuario)
+        entryContrasena.config(textvariable = self.contrasena)
+        entryUrl.config(textvariable = self.url)
+        entryNotas.config(textvariable = self.notas)
+                
+        # Crear botones
+        btn_guardar = tk.Button(self.frame1, text="Guardar", command = self.Guardar)
+        btn_guardar.grid(row=6, column=0)
+        
+        btn_cancelar = tk.Button(self.frame1, text="Generar Contraseñas", command = self.GenerarContra)
+        btn_cancelar.grid(row=6, column=1)
+    
+    def Guardar():
+        print("B Guardar")
+
+    def GenerarContra():
+        print("B Generar Contra")
+
+
 def main():       
     ventana = tk.Tk()
     # Crea la instancia de la clase VentanaPrincipal
