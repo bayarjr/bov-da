@@ -1,22 +1,8 @@
-"""
 import psycopg2
 
-try:
-    connection=psycopg2.connect(
-        database='Boveda',
-        host='localhost',
-        user= 'postgres',
-        password='Acciowombat5268',
-        port='5432'
-        )
-    
-    cur = connection.cursor()
-    cur.execute('''CREATE TABLE contrasenas
-       (ID SERIAL PRIMARY KEY,
-       SITIO TEXT NOT NULL,
-       USUARIO TEXT NOT NULL,
-       CONTRASENA TEXT NOT NULL);''')
-    connection.commit()
+def Abrir_baseDatos(self):
+    # Conexión a la base de datos
+    self.conn = psycopg2.connect(host="localhost", database="Boveda", user="postgres", password="j088058495r")
 
     # Cierre de conexión
     connection.close()
