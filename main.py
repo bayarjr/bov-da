@@ -377,17 +377,8 @@ class VentanaNuCre:
             messagebox.showerror("Error", "No ingreso la URL")
           
         else: 
-            print(self.usuarioC)
-            print(self.nombre.get())
-            print(self.usuario.get())
-            print(self.contrasena.get())
-            print(self.url.get())
-            print(self.notas.get())
-
             bd = BaseDatos()
             conn = bd.conectar()
-            
-                  
             # Creación de un cursor
             cur = conn.cursor()
             cur.execute("INSERT INTO credenciales (usuario_c, nombre_i, usuario_i, contrasena_i, url_i, notas_i) VALUES (%s, %s, %s, %s, %s, %s )", (str(self.usuarioC), str(self.nombre.get()), str(self.usuario.get()), str(self.contrasena.get()), str(self.url.get()), str(self.notas.get()),))
