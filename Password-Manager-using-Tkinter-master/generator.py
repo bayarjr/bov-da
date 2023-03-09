@@ -16,7 +16,7 @@ class PasswordGenerator:
         self.window.title("Password Generator")
         self.window.geometry("450x300")
 
-        # Label Frame
+        # Label Frampe
         self.label_frame = LabelFrame(self.window, text="Enter the number of characters")
         self.label_frame.pack(pady=20)
 
