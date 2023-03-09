@@ -221,7 +221,7 @@ class VentanaNu:
             # Creación de un cursor
             cur = conn.cursor()
             cur.execute("INSERT INTO master_user (usuario, pass) VALUES (%s, %s)", (str(self.username.get()), passEncriptado))
-            cur.execute("INSERT INTO credenciales (usuario_c) VALUES (%s)", (str(self.username.get()),))
+            #cur.execute("INSERT INTO credenciales (usuario_c) VALUES (%s)", (str(self.username.get()),))
             bd.cerrar()
 
             print(self.username.get())
@@ -294,12 +294,13 @@ class VentanaI:
 
     def NuevoCredencial(self):
         ventana_nu_cre = tk.Toplevel(self.ventana)
-        VentanaNuCre(ventana_nu_cre)
+        VentanaNuCre(ventana_nu_cre, self.usuario)
         print("boton nuevo credencial")
 
 class VentanaNuCre:
-    def __init__(self, ventana):
+    def __init__(self, ventana, usuario):
         self.ventana = ventana
+        self.usuarioC = usuario
         self.ventana.title("Nuevo Credencial")
         self.ventana.geometry("450x300")
 
@@ -358,13 +359,45 @@ class VentanaNuCre:
         btn_guardar = tk.Button(self.frame1, text="Guardar", command = self.Guardar)
         btn_guardar.grid(row=5, column=0)
         
-        btn_cancelar = tk.Button(self.frame1, text="Generar Contraseñas", command = self.GenerarContra)
+        btn_cancelar = tk.Button(self.frame1, text="Generar", command = self.GenerarContra)
         btn_cancelar.grid(row=5, column=1)
     
-    def Guardar():
+    def Guardar(self):
         print("B Guardar")
+        if self.nombre.get() == "":
+            messagebox.showerror("Error", "No ingreso el nombre del sitio")
+            
+        elif self.usuario.get() == "":
+            messagebox.showerror("Error", "No ingreso el usuario")
+            
+        elif self.contrasena.get() == "":
+            messagebox.showerror("Error", "No ingreso la contraseña")
+            
+        elif self.url.get() == "":
+            messagebox.showerror("Error", "No ingreso la URL")
+          
+        else: 
+            bd = BaseDatos()
+            conn = bd.conectar()
+            
+            print(self.usuarioC.get())
+            print(self.nombre.get())
+            print(str(self.usuario.get()))
+            print(str(self.contrasena.get()))
+            print(str(self.url.get()))
+            print(str(self.notas.get()))
 
-    def GenerarContra():
+            
+            # Creación de un cursor
+            cur = conn.cursor()
+            cur.execute("INSERT INTO credenciales (usuario_c, nombre_i, usuario_i, contrasena_i, url_i, notas_i) VALUES (%s, %s, %s, %s, %s, %s )", (str(self.usuarioC.get()), str(self.nombre.get()), str(self.usuario.get()), str(self.contrasena.get()), str(self.url.get()), str(self.notas.get()),))
+            bd.cerrar()
+                   
+            self.ventana.destroy()
+                     
+            print("Se guardo en Bd")
+
+    def GenerarContra(self):
         print("B Generar Contra")
 
 
