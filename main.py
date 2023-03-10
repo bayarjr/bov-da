@@ -221,7 +221,7 @@ class VentanaNu:
             # Creación de un cursor
             cur = conn.cursor()
             cur.execute("INSERT INTO master_user (usuario, pass) VALUES (%s, %s)", (str(self.username.get()), passEncriptado))
-            cur.execute("INSERT INTO credenciales (usuario_c) VALUES (%s)", (str(self.username.get()),))
+            #cur.execute("INSERT INTO credenciales (usuario_c) VALUES (%s)", (str(self.username.get()),))
             bd.cerrar()
 
             print(self.username.get())
@@ -255,23 +255,34 @@ class VentanaI:
         frame1 = tk.LabelFrame(self.ventana)
         frame1.pack(padx=40, pady=10)
 
-        self.elementos = ("Elemento 1", "Elemento 2", "Elemento 3", "Elemento 4", "Elemento 5")
+        bd = BaseDatos()
+        conn = bd.conectar()
+        # Creación de un cursor
+        cur = conn.cursor()
+        cur.execute("SELECT nombre_i FROM credenciales WHERE usuario_c = %s",(self.usuario, ))
+        el = cur.fetchall()
+        self.elementos = tuple(zip(*el))[0]
+        bd.cerrar()
+
+        print('elementos'+ str(self.elementos))
 
         # Crear el ComboBox y agregarlo a la ventana
-        combo_box = ttk.Combobox(frame, state="readonly")
-        combo_box.grid(row=0, column=0)
+        self.combo_box = ttk.Combobox(frame, state="readonly")
+        self.combo_box.grid(row=0, column=0)
         
         # Llenar el ComboBox con los elementos de la tupla
-        combo_box["values"] = self.elementos
+        self.combo_box["values"] = self.elementos
 
         # Vincular el ComboBox a una variable de control
-        self.seleccion = tk.StringVar()
-        combo_box.config(textvariable=self.seleccion)
-        combo_box.bind("<<ComboboxSelected>>", self.mostrar_elemento)
+        self.seleccion2 = tk.StringVar()
+        self.combo_box.config(textvariable=self.seleccion2)
+        self.combo_box.bind("<<ComboboxSelected>>", self.mostrar_elemento)
+
+        print("seleccion"+ self.seleccion2.get())
         
         # Crear la etiqueta donde se mostrará el elemento seleccionado
-        self.entry = tk.Entry(frame)
-        self.entry.grid(row=1, column=0)
+        self.entryU = tk.Entry(frame)
+        self.entryU.grid(row=1, column=0)
 
         # Crear los botones
         mod_button = tk.Button(frame1, text="Modificar", command = self.Modificar)
@@ -282,24 +293,48 @@ class VentanaI:
         new_button.grid(row=0, column=1)
 
     def mostrar_elemento(self, event):
-        # Obtener el elemento seleccionado
-        elemento = self.seleccion.get()
-        self.entry.insert(0, elemento)
-        # Configurar el widget Entry como de solo lectura
-        self.entry.config(state="readonly")
-       
-    def Modificar(self):
-        print("Modificar") 
-        self.entry.config(state="normal")
+        
 
+        bd = BaseDatos()
+        conn = bd.conectar()
+        # Creación de un cursor
+        cur = conn.cursor()
+        cur.execute("SELECT usuario_i, contrasena_i, url_i, notas_i FROM credenciales WHERE usuario_c = %s AND nombre_i =%s",(self.usuario, self.seleccion2.get(), ))
+        ele = cur.fetchall()
+        self.elementos1 = tuple(zip(*ele))
+        bd.cerrar() 
+        
+        # Obtener el elemento seleccionado
+        print("elementos seleccionados" + str(self.elementos1))
+        print("elementos seleccionados2 " + str(self.elementos1[2][0]))
+
+        self.entryU.insert(0, str(self.elementos1[0][0]))
+        self.entryU.config(state="readonly")
+             
+    def Modificar(self):
+        
+        print("Modificar")
+        bd = BaseDatos()
+        conn = bd.conectar()
+        # Creación de un cursor
+        cur = conn.cursor()
+        cur.execute("SELECT nombre_i FROM credenciales WHERE usuario_c = %s",(self.usuario, ))
+        self.elementos = cur.fetchall()
+        bd.cerrar() 
+        # Llenar el ComboBox con los elementos de la tupla
+        self.combo_box["values"] = self.elementos
+
+        self.entryU.config(state="normal")
+   
     def NuevoCredencial(self):
         ventana_nu_cre = tk.Toplevel(self.ventana)
-        VentanaNuCre(ventana_nu_cre)
+        VentanaNuCre(ventana_nu_cre, self.usuario)
         print("boton nuevo credencial")
 
 class VentanaNuCre:
-    def __init__(self, ventana):
+    def __init__(self, ventana, usuario):
         self.ventana = ventana
+        self.usuarioC = usuario
         self.ventana.title("Nuevo Credencial")
         self.ventana.geometry("450x300")
 
@@ -358,15 +393,37 @@ class VentanaNuCre:
         btn_guardar = tk.Button(self.frame1, text="Guardar", command = self.Guardar)
         btn_guardar.grid(row=5, column=0)
         
-        btn_cancelar = tk.Button(self.frame1, text="Generar Contraseñas", command = self.GenerarContra)
+        btn_cancelar = tk.Button(self.frame1, text="Generar", command = self.GenerarContra)
         btn_cancelar.grid(row=5, column=1)
     
-    def Guardar():
+    def Guardar(self):
         print("B Guardar")
+        if self.nombre.get() == "":
+            messagebox.showerror("Error", "No ingreso el nombre del sitio")
+            
+        elif self.usuario.get() == "":
+            messagebox.showerror("Error", "No ingreso el usuario")
+            
+        elif self.contrasena.get() == "":
+            messagebox.showerror("Error", "No ingreso la contraseña")
+            
+        elif self.url.get() == "":
+            messagebox.showerror("Error", "No ingreso la URL")
+          
+        else: 
+            bd = BaseDatos()
+            conn = bd.conectar()
+            # Creación de un cursor
+            cur = conn.cursor()
+            cur.execute("INSERT INTO credenciales (usuario_c, nombre_i, usuario_i, contrasena_i, url_i, notas_i) VALUES (%s, %s, %s, %s, %s, %s )", (str(self.usuarioC), str(self.nombre.get()), str(self.usuario.get()), str(self.contrasena.get()), str(self.url.get()), str(self.notas.get()),))
+            bd.cerrar()
+                   
+            self.ventana.destroy()
+                     
+            print("Se guardo en Bd")
 
-    def GenerarContra():
+    def GenerarContra(self):
         print("B Generar Contra")
-
 
 def main():       
     ventana = tk.Tk()
