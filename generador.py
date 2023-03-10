@@ -4,6 +4,7 @@ import random
 import tkinter as tk
 from tkinter import ttk
 
+
 class Generador: 
     def __init__(self,ventana):
         self.ventana=ventana
@@ -11,13 +12,13 @@ class Generador:
         self.ventana.geometry("450x300")
         
         # Label Frame
-        self.label_frame = LabelFrame(self.ventana, text="¿Que tan segura será tu contraseña?")
-        self.label_frame.pack(pady=1)
+        self.label = Label(self.ventana, text="¿Que tan segura será tu contraseña?")
+        self.label.pack(pady=1)
         #Variable para nivel de complejidad
         complejidad=tk.StringVar()
         #Botones de radio para cada nivel
-        opcion1 = tk.Radiobutton(self.label_frame, text="Muy Bajo", variable=complejidad, value=6)
-        opcion2 = tk.Radiobutton(self.label_frame, text="Bajo", variable=complejidad, value=8)
+        opcion1 = tk.Radiobutton(self.label, text="Muy Bajo", variable=complejidad, value=6)
+        opcion2 = tk.Radiobutton(self.label, text="Bajo", variable=complejidad, value=8)
         opcion3 = tk.Radiobutton(self.label_frame, text="Normal", variable=complejidad, value=10)
         opcion4 = tk.Radiobutton(self.label_frame, text="Dificil", variable=complejidad, value=12)
         opcion5 = tk.Radiobutton(self.label_frame, text="Muy Dificil", variable=complejidad, value=16)
@@ -34,12 +35,6 @@ class Generador:
         self.etiqueta_contrasena = tk.Label(self.ventana, text="")
         self.etiqueta_contrasena.pack()
 
-
-
-
-    
-        
-
 def main():
 
     ventana = tk.Tk()
@@ -50,3 +45,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
