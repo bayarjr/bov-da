@@ -446,7 +446,9 @@ class VentanaNuCre:
             #print("Se guardo en Bd")
 
     def GenerarContra(self):
-        print("B Generar Contra")
+        ventana_Gc = tk.Toplevel(self.ventana)
+        VentanaGc(ventana_Gc)
+        #print("boton nuevo usuario")
 
 class VentanaMod:
     def __init__(self, ventana, SelNombre, usuario):
@@ -513,8 +515,7 @@ class VentanaMod:
         self.entryUrl.config(state="normal", textvariable=self.VaMoUr)
         self.entryNotas.insert(0, str(self.elementos[3]))
         self.entryNotas.config(state="normal", textvariable=self.VaMoNo)
-
-        
+     
     def ModCe(self):
         print(str(self.VaMoUs) +" "+ str(self.VaMoCo) +" "+ str(self.VaMoUr) +" "+ str(self.VaMoNo) +" "+ str(self.usuario) +" "+  str(self.SelNombre))
         bd = BaseDatos()
@@ -528,6 +529,17 @@ class VentanaMod:
         bd.cerrar()
                
         self.ventana.destroy()
+
+class VentanaGc:
+    def __init__(self, ventana):
+        self.ventana = ventana
+        self.ventana.title("Generador de contraseñas")
+        self.ventana.geometry("450x300")
+        self.Objetos_ventanaGc()
+    
+    def Objetos_ventanaGc(self):
+        print("Gc")
+
 
 def main():       
     ventana = tk.Tk()
