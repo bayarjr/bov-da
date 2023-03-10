@@ -284,6 +284,7 @@ class VentanaI:
         labelUsuario.grid(row=1, column=0)
         self.entryU = tk.Entry(frame)
         self.entryU.grid(row=1, column=1)
+        self.entryU.insert(0, " ")
 
         labelContra = tk.Label(frame, text="Contraseña:")
         labelContra.grid(row=2, column=0)
@@ -309,12 +310,12 @@ class VentanaI:
         salir_button.grid(row=0, column=2)
 
     def mostrar_elemento(self, event):
-        self.entryU.insert(0, " ")
-        self.entryC.insert(0, " ")
-        self.entryUr.insert(0, " ")
-        self.entryN.insert(0, " ")
-       
 
+        self.entryU.delete(0, "end")
+        self.entryC.delete(0, "end")
+        self.entryUr.delete(0, "end")
+        self.entryN.delete(0, "end")
+                      
         bd = BaseDatos()
         conn = bd.conectar()
         # Creación de un cursor
@@ -329,13 +330,13 @@ class VentanaI:
         #print("elementos seleccionados2 " + str(self.elementos1[2][0]))
 
         self.entryU.insert(0, str(self.elementos1[0][0]))
-        self.entryU.config(state="normal")
+        #self.entryU.config(state="disable")
         self.entryC.insert(0, str(self.elementos1[1][0]))
-        self.entryC.config(state="normal")
+        #self.entryC.config(state="readonly")
         self.entryUr.insert(0, str(self.elementos1[2][0]))
-        self.entryUr.config(state="normal")
+        #self.entryUr.config(state="readonly")
         self.entryN.insert(0, str(self.elementos1[3][0]))
-        self.entryN.config(state="normal")
+        #self.entryN.config(state="readonly")
      
     def Modificar(self):
         
