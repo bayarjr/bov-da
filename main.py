@@ -10,7 +10,7 @@ class BaseDatos:
     
     def conectar(self):
         self.conn = psycopg2.connect(host="localhost", database="Boveda", user="postgres", password="j088058495r")
-        print("BD abierta")
+        #print("BD abierta")
         return self.conn
     
     def cerrar(self):
@@ -18,7 +18,7 @@ class BaseDatos:
             # Confirmar la transacción
             self.conn.commit()
             self.conn.close()
-            print("BD Cerrada")
+           #print("BD Cerrada")
 
 class Encriptar:
     def __init__(self, passw):
@@ -115,16 +115,15 @@ class VentanaPrincipal:
                     messagebox.showerror("Error", "Contraseña Incorrecta")
             else:
                 messagebox.showerror("Error", "No se encontro el usuario")
-
-            
-            print(self.username.get())
-            print(self.password.get())
-            print("iniciar sesión")
+        
+            #print(self.username.get())
+            #print(self.password.get())
+            #print("iniciar sesión")
  
     def NuevoUsuario(self):
         ventana_nu = tk.Toplevel(self.ventana)
         VentanaNu(ventana_nu)
-        print("boton nuevo usuario")
+        #print("boton nuevo usuario")
 
 class VentanaNu:
     def __init__(self, ventana):
@@ -237,7 +236,7 @@ class VentanaNu:
             self.password2.set('')
             self.ventana.destroy()
                      
-            print("Registrar")
+            #print("Registrar")
   
 class VentanaI:
 
@@ -245,15 +244,15 @@ class VentanaI:
         self.ventana = ventana
         self.usuario = usuario
         self.ventana.title("Administrador de contraseñas")
-        self.ventana.geometry("450x300")
+        self.ventana.geometry("650x300")
         self.Objetos_ventanaI()
     
     def Objetos_ventanaI(self):
-        print ("ventana inicio")
+        #print ("ventana inicio")
         frame = tk.LabelFrame(self.ventana)
-        frame.pack(padx=40, pady=10)
+        frame.pack(padx=40, pady=40)
         frame1 = tk.LabelFrame(self.ventana)
-        frame1.pack(padx=40, pady=10)
+        frame1.pack(padx=40, pady=40)
 
         bd = BaseDatos()
         conn = bd.conectar()
@@ -264,36 +263,57 @@ class VentanaI:
         self.elementos = tuple(zip(*el))[0]
         bd.cerrar()
 
-        print('elementos'+ str(self.elementos))
+        print("seleccion objetos combo_box  :" + str(self.elementos))
 
         # Crear el ComboBox y agregarlo a la ventana
+        labelNombre = tk.Label(frame, text="Nombre del servicio digital:")
+        labelNombre.grid(row=0, column=0)
         self.combo_box = ttk.Combobox(frame, state="readonly")
-        self.combo_box.grid(row=0, column=0)
-        
+        self.combo_box.grid(row=0, column=1)
         # Llenar el ComboBox con los elementos de la tupla
         self.combo_box["values"] = self.elementos
-
         # Vincular el ComboBox a una variable de control
         self.seleccion2 = tk.StringVar()
         self.combo_box.config(textvariable=self.seleccion2)
         self.combo_box.bind("<<ComboboxSelected>>", self.mostrar_elemento)
 
-        print("seleccion"+ self.seleccion2.get())
+        #print("seleccion"+ self.seleccion2.get())
         
         # Crear la etiqueta donde se mostrará el elemento seleccionado
+        labelUsuario = tk.Label(frame, text="Usuario:")
+        labelUsuario.grid(row=1, column=0)
         self.entryU = tk.Entry(frame)
-        self.entryU.grid(row=1, column=0)
+        self.entryU.grid(row=1, column=1)
 
+        labelContra = tk.Label(frame, text="Contraseña:")
+        labelContra.grid(row=2, column=0)
+        self.entryC = tk.Entry(frame)
+        self.entryC.grid(row=2, column=1)
+
+        labelUrl = tk.Label(frame, text="URL:")
+        labelUrl.grid(row=3, column=0)
+        self.entryUr = tk.Entry(frame)
+        self.entryUr.grid(row=3, column=1)
+        
+        labelNota = tk.Label(frame, text="Nota:")
+        labelNota.grid(row=4, column=0)
+        self.entryN = tk.Entry(frame)
+        self.entryN.grid(row=4, column=1)
+         
         # Crear los botones
         mod_button = tk.Button(frame1, text="Modificar", command = self.Modificar)
-        #mod_button.grid(row=0, column=0)
         mod_button.grid(row=0, column=0)
         new_button = tk.Button(frame1, text="Nuevo", command = self.NuevoCredencial)
-        #new_button.grid(row=0, column=1)
         new_button.grid(row=0, column=1)
+        salir_button = tk.Button(frame1, text="Salir", command = self.Salir)
+        salir_button.grid(row=0, column=2)
 
     def mostrar_elemento(self, event):
-        
+        self.entryU.insert(0, " ")
+        self.entryC.insert(0, " ")
+        self.entryUr.insert(0, " ")
+        self.entryN.insert(0, " ")
+       
 
         bd = BaseDatos()
         conn = bd.conectar()
@@ -301,36 +321,38 @@ class VentanaI:
         cur = conn.cursor()
         cur.execute("SELECT usuario_i, contrasena_i, url_i, notas_i FROM credenciales WHERE usuario_c = %s AND nombre_i =%s",(self.usuario, self.seleccion2.get(), ))
         ele = cur.fetchall()
-        self.elementos1 = tuple(zip(*ele))
         bd.cerrar() 
-        
+        self.elementos1 = tuple(zip(*ele))
+
         # Obtener el elemento seleccionado
         print("elementos seleccionados" + str(self.elementos1))
-        print("elementos seleccionados2 " + str(self.elementos1[2][0]))
+        #print("elementos seleccionados2 " + str(self.elementos1[2][0]))
 
         self.entryU.insert(0, str(self.elementos1[0][0]))
-        self.entryU.config(state="readonly")
-             
+        self.entryU.config(state="normal")
+        self.entryC.insert(0, str(self.elementos1[1][0]))
+        self.entryC.config(state="normal")
+        self.entryUr.insert(0, str(self.elementos1[2][0]))
+        self.entryUr.config(state="normal")
+        self.entryN.insert(0, str(self.elementos1[3][0]))
+        self.entryN.config(state="normal")
+     
     def Modificar(self):
         
-        print("Modificar")
-        bd = BaseDatos()
-        conn = bd.conectar()
-        # Creación de un cursor
-        cur = conn.cursor()
-        cur.execute("SELECT nombre_i FROM credenciales WHERE usuario_c = %s",(self.usuario, ))
-        self.elementos = cur.fetchall()
-        bd.cerrar() 
-        # Llenar el ComboBox con los elementos de la tupla
-        self.combo_box["values"] = self.elementos
+        #print("Modificar")
+        ventana_mod = tk.Toplevel(self.ventana)
+        VentanaMod(ventana_mod, self.seleccion2.get(), self.usuario) 
 
-        self.entryU.config(state="normal")
-   
     def NuevoCredencial(self):
         ventana_nu_cre = tk.Toplevel(self.ventana)
         VentanaNuCre(ventana_nu_cre, self.usuario)
-        print("boton nuevo credencial")
+        #print("boton nuevo credencial")
 
+    def Salir(self):
+        ventana_P = tk.Toplevel(self.ventana)
+        VentanaPrincipal(ventana_P)
+        self.ventana.withdraw()
+      
 class VentanaNuCre:
     def __init__(self, ventana, usuario):
         self.ventana = ventana
@@ -350,7 +372,7 @@ class VentanaNuCre:
         self.frame1.pack(padx=40, pady=10)
 
         # Crea labels y entry
-        labelNombre = tk.Label(self.frame, text="(Nombre del servicio digital:")
+        labelNombre = tk.Label(self.frame, text="Nombre del servicio digital:")
         labelNombre.grid(row=0, column=0)
         entryNombre = tk.Entry(self.frame)
         entryNombre.grid(row=0, column=1)
@@ -418,12 +440,93 @@ class VentanaNuCre:
             cur.execute("INSERT INTO credenciales (usuario_c, nombre_i, usuario_i, contrasena_i, url_i, notas_i) VALUES (%s, %s, %s, %s, %s, %s )", (str(self.usuarioC), str(self.nombre.get()), str(self.usuario.get()), str(self.contrasena.get()), str(self.url.get()), str(self.notas.get()),))
             bd.cerrar()
                    
-            self.ventana.destroy()
+            self.ventana.withdraw()
                      
-            print("Se guardo en Bd")
+            #print("Se guardo en Bd")
 
     def GenerarContra(self):
         print("B Generar Contra")
+
+class VentanaMod:
+    def __init__(self, ventana, SelNombre, usuario):
+        self.ventana = ventana
+        self.SelNombre = SelNombre
+        self.usuario = usuario
+        self.ventana.title("Modificar credenciales")
+        self.ventana.geometry("450x300")
+
+        self.Objetos_ventanaMod()
+
+    def Objetos_ventanaMod(self):
+        # Crea frame para entradas
+        self.frame = tk.LabelFrame(self.ventana)
+        self.frame.pack(padx=40, pady=10)
+
+        self.frame1 = tk.LabelFrame(self.ventana)
+        self.frame1.pack(padx=40, pady=10)
+             
+        labelUsuario = tk.Label(self.frame, text="Usuario:")
+        labelUsuario.grid(row=1, column=0)
+        self.entryUsuario = tk.Entry(self.frame)
+        self.entryUsuario.grid(row=1, column=1)
+        
+        labelContrasena = tk.Label(self.frame, text="Contraseña:")
+        labelContrasena.grid(row=2, column=0)
+        self.entryContrasena = tk.Entry(self.frame)
+        self.entryContrasena.grid(row=2, column=1)
+        
+        labelUrl = tk.Label(self.frame, text="URL:")
+        labelUrl.grid(row=3, column=0)
+        self.entryUrl = tk.Entry(self.frame)
+        self.entryUrl.grid(row=3, column=1)
+        
+        labelNotas = tk.Label(self.frame, text="Notas:")
+        labelNotas.grid(row=4, column=0)
+        self.entryNotas = tk.Entry(self.frame)
+        self.entryNotas.grid(row=4, column=1)
+
+        mod_button = tk.Button(self.frame, text="Modificar", command = self.ModCe)
+        mod_button.grid(row=5, column=1)
+
+        # Conexión BD
+        bd = BaseDatos()
+        conn = bd.conectar()
+        # Creación de un cursor
+        cur = conn.cursor()
+        cur.execute("SELECT usuario_i, contrasena_i, url_i, notas_i FROM credenciales WHERE usuario_c = %s AND nombre_i = %s", (self.usuario, self.SelNombre,))
+        el = cur.fetchall()
+        self.elementos = tuple(zip(*el))
+        bd.cerrar()
+        print("seleccion modificar "+ str(self.elementos))
+        
+        self.VaMoUs = tk.StringVar()
+        self.VaMoCo = tk.StringVar()
+        self.VaMoUr = tk.StringVar()
+        self.VaMoNo = tk.StringVar()
+
+        self.entryUsuario.insert(0, str(self.elementos[0]))
+        self.entryUsuario.config(state="normal", textvariable=self.VaMoUs)
+        self.entryContrasena.insert(0, str(self.elementos[1]))
+        self.entryContrasena.config(state="normal", textvariable=self.VaMoCo)
+        self.entryUrl.insert(0, str(self.elementos[2]))
+        self.entryUrl.config(state="normal", textvariable=self.VaMoUr)
+        self.entryNotas.insert(0, str(self.elementos[3]))
+        self.entryNotas.config(state="normal", textvariable=self.VaMoNo)
+
+        
+    def ModCe(self):
+        print(str(self.VaMoUs) +" "+ str(self.VaMoCo) +" "+ str(self.VaMoUr) +" "+ str(self.VaMoNo) +" "+ str(self.usuario) +" "+  str(self.SelNombre))
+        bd = BaseDatos()
+        conn = bd.conectar()
+        # Creación de un cursor
+        cur = conn.cursor()
+        #sentencia_sql = " UPDATE credenciales SET usuario_i = %s, contrasena_i = %s, url_i = %s, notas_i = %s WHERE  usuario_c = %s AND nombre_i = %s"
+        #datos = (self.VaMoUs, self.VaMoCo, self.VaMoUr, self.VaMoNo, self.usuario, self.SelNombre)
+        #cur.execute(sentencia_sql, datos)
+        cur.execute(" UPDATE credenciales SET usuario_i = %s, contrasena_i = %s, url_i = %s, notas_i = %s WHERE  usuario_c = %s AND nombre_i = %s", (str(self.VaMoUs), str(self.VaMoCo), str(self.VaMoUr), str(self.VaMoNo), str(self.usuario), str(self.SelNombre)))
+        bd.cerrar()
+               
+        self.ventana.destroy()
 
 def main():       
     ventana = tk.Tk()
