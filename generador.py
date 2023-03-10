@@ -1,48 +1,52 @@
-from tkinter import Button, Entry, Frame, Label, LabelFrame,Scrollbar, Tk, messagebox
-import string
 import random
+import string
 import tkinter as tk
-from tkinter import ttk
+import pyperclip
 
+class PasswordGenerator:
+    def __init__(self, master):
+        self.master = master
+        master.title("Generador de contraseñas")
 
-class Generador: 
-    def __init__(self,ventana):
-        self.ventana=ventana
-        self.ventana.title("Generador de contraseñas")
-        self.ventana.geometry("450x300")
+        self.label = tk.Label(master, text="Nivel de complejidad:")
+        self.label.pack()
+
+        self.level = tk.StringVar()
+        self.level.set("Bajo")
+        self.level_choices = ["Bajo", "Medio", "Alto", "Muy alto"]
+        self.level_dropdown = tk.OptionMenu(master, self.level, *self.level_choices)
+        self.level_dropdown.pack()
+
+        self.generate_button = tk.Button(master, text="Generar contraseña", command=self.generate_password)
+        self.generate_button.pack()
+
+        self.password_label = tk.Label(master, text="")
+        self.password_label.pack()
+
+        self.copy_button = tk.Button(master, text="Copiar al portapapeles", command=self.copy_password)
+        self.copy_button.pack()
+
+    def generate_password(self):
+        length = {"Bajo": 8, "Medio": 12, "Alto": 16, "Muy alto": 20}
+        level = self.level.get()
+        if level == "Bajo":
+            chars = string.ascii_lowercase + string.digits
+        elif level == "Medio":
+            chars = string.ascii_letters + string.digits
+        elif level == "Alto":
+            chars = string.ascii_letters + string.digits + string.punctuation
+        else:
+            chars = string.ascii_letters + string.digits + string.punctuation + "¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿"
+        password = "".join(random.choice(chars) for _ in range(length[level]))
+        self.password_label.configure(text=password)
+        self.copy_button.config(text="Copiar al portapapeles",command=self.copy_password)
+
+    def copy_password(self):
+        password = self.password_label.cget("text")
+        pyperclip.copy(password)
+        self.copy_button.configure(text="¡Copiado!")
         
-        # Label Frame
-        self.label = Label(self.ventana, text="¿Que tan segura será tu contraseña?")
-        self.label.pack(pady=1)
-        #Variable para nivel de complejidad
-        complejidad=tk.StringVar()
-        #Botones de radio para cada nivel
-        opcion1 = tk.Radiobutton(self.label, text="Muy Bajo", variable=complejidad, value=6)
-        opcion2 = tk.Radiobutton(self.label, text="Bajo", variable=complejidad, value=8)
-        opcion3 = tk.Radiobutton(self.label_frame, text="Normal", variable=complejidad, value=10)
-        opcion4 = tk.Radiobutton(self.label_frame, text="Dificil", variable=complejidad, value=12)
-        opcion5 = tk.Radiobutton(self.label_frame, text="Muy Dificil", variable=complejidad, value=16)
 
-        # Colocar los botones de radio en la ventana
-        opcion1.grid(row=0, column=0)
-        opcion2.grid(row=1, column=0)
-        opcion3.grid(row=2, column=0)
-        opcion4.grid(row=3, column=0)
-        opcion5.grid(row=4, column=0)
-        
-        print(complejidad)
-        # Crear una etiqueta para mostrar la contraseña generada
-        self.etiqueta_contrasena = tk.Label(self.ventana, text="")
-        self.etiqueta_contrasena.pack()
-
-def main():
-
-    ventana = tk.Tk()
-    Generador(ventana)
-    ventana.mainloop()
-    
-
-
-if __name__ == "__main__":
-    main()
-    
+root = tk.Tk()
+my_password_generator = PasswordGenerator(root)
+root.mainloop()
