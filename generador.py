@@ -1,7 +1,8 @@
 import random
 import string
-import tkinter as tk
 import pyperclip
+import tkinter as tk
+
 
 class PasswordGenerator:
     def __init__(self, master):

@@ -3,6 +3,9 @@ import tkinter as tk
 from tkinter import ttk
 import psycopg2
 import hashlib
+import random
+import string
+import pyperclip
 
 class BaseDatos:
     def __init__(self):
@@ -234,17 +237,18 @@ class VentanaNu:
             self.username.set('')
             self.password.set('')
             self.password2.set('')
-            self.ventana.destroy()
+            self.ventana.withdraw()
                      
             #print("Registrar")
   
 class VentanaI:
+    
 
     def __init__(self, ventana, usuario):
         self.ventana = ventana
         self.usuario = usuario
         self.ventana.title("Administrador de contraseñas")
-        self.ventana.geometry("650x300")
+        self.ventana.geometry("450x300")
         self.Objetos_ventanaI()
     
     def Objetos_ventanaI(self):
@@ -355,22 +359,26 @@ class VentanaI:
         self.ventana.withdraw()
       
 class VentanaNuCre:
+
     def __init__(self, ventana, usuario):
         self.ventana = ventana
         self.usuarioC = usuario
         self.ventana.title("Nuevo Credencial")
-        self.ventana.geometry("450x300")
+        self.ventana.geometry("450x400")
 
         self.Objetos_ventanaNuCre()
     
     def Objetos_ventanaNuCre(self):
         
         # Crea frame para entradas
-        self.frame = tk.LabelFrame(self.ventana)
+        self.frame = tk.Frame(self.ventana)
         self.frame.pack(padx=40, pady=10)
 
-        self.frame1 = tk.LabelFrame(self.ventana)
+        self.frame1 = tk.Frame(self.ventana)
         self.frame1.pack(padx=40, pady=10)
+
+        self.FrameGc = tk.LabelFrame(self.ventana, text="Generador de contraseñas")
+        self.FrameGc.pack(padx=40, pady=10)
 
         # Crea labels y entry
         labelNombre = tk.Label(self.frame, text="Nombre del servicio digital:")
@@ -397,6 +405,22 @@ class VentanaNuCre:
         labelNotas.grid(row=4, column=0)
         entryNotas = tk.Entry(self.frame)
         entryNotas.grid(row=4, column=1)
+
+        # Generador de contraseñas 
+        self.level = tk.StringVar()
+        self.level.set("Bajo")
+        self.level_choices = ["Bajo", "Medio", "Alto", "Muy alto"]
+        self.level_dropdown = tk.OptionMenu(self.FrameGc, self.level, *self.level_choices)
+        self.level_dropdown.pack()
+
+        self.generate_button = tk.Button(self.FrameGc, text="Generar contraseña", command=self.generate_password)
+        self.generate_button.pack()
+
+        self.password_label = tk.Label(self.FrameGc, text="")
+        self.password_label.pack()
+
+        self.copy_button = tk.Button(self.FrameGc, text="Copiar al portapapeles", command=self.copy_password)
+        self.copy_button.pack()
   
         # Crea las variables de instancia para guardar los valores de las entradas
         self.nombre = tk.StringVar()
@@ -416,9 +440,6 @@ class VentanaNuCre:
         btn_guardar = tk.Button(self.frame1, text="Guardar", command = self.Guardar)
         btn_guardar.grid(row=5, column=0)
         
-        btn_cancelar = tk.Button(self.frame1, text="Generar", command = self.GenerarContra)
-        btn_cancelar.grid(row=5, column=1)
-    
     def Guardar(self):
         print("B Guardar")
         if self.nombre.get() == "":
@@ -440,15 +461,35 @@ class VentanaNuCre:
             cur = conn.cursor()
             cur.execute("INSERT INTO credenciales (usuario_c, nombre_i, usuario_i, contrasena_i, url_i, notas_i) VALUES (%s, %s, %s, %s, %s, %s )", (str(self.usuarioC), str(self.nombre.get()), str(self.usuario.get()), str(self.contrasena.get()), str(self.url.get()), str(self.notas.get()),))
             bd.cerrar()
-                   
+
+            #ventana_I = tk.Toplevel(self.ventana)
+                  
             self.ventana.withdraw()
+            VentanaI(self.ventana) 
                      
             #print("Se guardo en Bd")
 
-    def GenerarContra(self):
-        ventana_Gc = tk.Toplevel(self.ventana)
-        VentanaGc(ventana_Gc)
-        #print("boton nuevo usuario")
+    def generate_password(self):
+        length = {"Bajo": 8, "Medio": 12, "Alto": 16, "Muy alto": 20}
+        level = self.level.get()
+
+        if level == "Bajo":
+            chars = string.ascii_lowercase + string.digits
+        elif level == "Medio":
+            chars = string.ascii_letters + string.digits
+        elif level == "Alto":
+            chars = string.ascii_letters + string.digits + string.punctuation
+        else:
+            chars = string.ascii_letters + string.digits + string.punctuation + "¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿"
+
+        password = "".join(random.choice(chars) for _ in range(length[level]))
+        self.password_label.configure(text=password)
+        self.copy_button.config(text="Copiar al portapapeles",command=self.copy_password)
+
+    def copy_password(self):
+        password = self.password_label.cget("text")
+        pyperclip.copy(password)
+        self.copy_button.configure(text="¡Copiado!")
 
 class VentanaMod:
     def __init__(self, ventana, SelNombre, usuario):
@@ -464,7 +505,7 @@ class VentanaMod:
         # Crea frame para entradas
         self.frame = tk.LabelFrame(self.ventana)
         self.frame.pack(padx=40, pady=10)
-
+        
         self.frame1 = tk.LabelFrame(self.ventana)
         self.frame1.pack(padx=40, pady=10)
              
@@ -507,40 +548,33 @@ class VentanaMod:
         self.VaMoUr = tk.StringVar()
         self.VaMoNo = tk.StringVar()
 
-        self.entryUsuario.insert(0, str(self.elementos[0]))
-        self.entryUsuario.config(state="normal", textvariable=self.VaMoUs)
-        self.entryContrasena.insert(0, str(self.elementos[1]))
-        self.entryContrasena.config(state="normal", textvariable=self.VaMoCo)
-        self.entryUrl.insert(0, str(self.elementos[2]))
-        self.entryUrl.config(state="normal", textvariable=self.VaMoUr)
-        self.entryNotas.insert(0, str(self.elementos[3]))
-        self.entryNotas.config(state="normal", textvariable=self.VaMoNo)
-     
+        self.entryUsuario.insert(0, str(self.elementos[0][0]))
+        
+        self.entryContrasena.insert(0, str(self.elementos[1][0]))
+        
+        self.entryUrl.insert(0, str(self.elementos[2][0]))
+        
+        self.entryNotas.insert(0, str(self.elementos[3][0]))
+
     def ModCe(self):
-        print(str(self.VaMoUs) +" "+ str(self.VaMoCo) +" "+ str(self.VaMoUr) +" "+ str(self.VaMoNo) +" "+ str(self.usuario) +" "+  str(self.SelNombre))
-        bd = BaseDatos()
-        conn = bd.conectar()
+        #self.entryUsuario.config(textvariable=self.VaMoUs)
+        #self.entryContrasena.config(textvariable=self.VaMoCo)
+        #self.entryUrl.config(textvariable=self.VaMoUr)
+       # self.entryNotas.config(textvariable=self.VaMoNo)
+
+        #print("sdfasd  "+str(self.VaMoUs.get()))
+        #bd = BaseDatos()
+        #conn = bd.conectar()
         # Creación de un cursor
-        cur = conn.cursor()
+        #cur = conn.cursor()
         #sentencia_sql = " UPDATE credenciales SET usuario_i = %s, contrasena_i = %s, url_i = %s, notas_i = %s WHERE  usuario_c = %s AND nombre_i = %s"
         #datos = (self.VaMoUs, self.VaMoCo, self.VaMoUr, self.VaMoNo, self.usuario, self.SelNombre)
         #cur.execute(sentencia_sql, datos)
-        cur.execute(" UPDATE credenciales SET usuario_i = %s, contrasena_i = %s, url_i = %s, notas_i = %s WHERE  usuario_c = %s AND nombre_i = %s", (str(self.VaMoUs), str(self.VaMoCo), str(self.VaMoUr), str(self.VaMoNo), str(self.usuario), str(self.SelNombre)))
-        bd.cerrar()
+        #cur.execute(" UPDATE credenciales SET usuario_i = %s, contrasena_i = %s, url_i = %s, notas_i = %s WHERE  usuario_c = %s AND nombre_i = %s", (str(self.VaMoUs.get()), str(self.VaMoCo.get()), str(self.VaMoUr.get()), str(self.VaMoNo.get()), str(self.usuario), str(self.SelNombre)))
+       # bd.cerrar()
                
         self.ventana.destroy()
-
-class VentanaGc:
-    def __init__(self, ventana):
-        self.ventana = ventana
-        self.ventana.title("Generador de contraseñas")
-        self.ventana.geometry("450x300")
-        self.Objetos_ventanaGc()
-    
-    def Objetos_ventanaGc(self):
-        print("Gc")
-
-
+ 
 def main():       
     ventana = tk.Tk()
     # Crea la instancia de la clase VentanaPrincipal
